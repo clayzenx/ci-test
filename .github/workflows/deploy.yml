@@ -1,0 +1,58 @@
+name: Deploy Vue to GitHub Pages
+
+on:
+  # Deploy on every push to main
+  push:
+    branches: ["main"]
+
+  # Allow manual deploy
+  workflow_dispatch:
+
+# Required permissions for Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout repo
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Setup Node.js
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. Install Playwright browsers (if tests exist)
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
+      # 5. Run tests
+      - name: Run tests
+        run: npx playwright test
+
+      # 6. Build Vue app
+      - name: Build
+        run: npm run build
+
+      # 7. Upload dist/ as Pages artifact
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      # 8. Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
+
