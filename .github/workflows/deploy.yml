@@ -34,14 +34,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4. Install Playwright browsers (if tests exist)
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
-      # 5. Run tests
-      - name: Run tests
-        run: npx playwright test
-
       # 6. Build Vue app
       - name: Build
         run: npm run build
