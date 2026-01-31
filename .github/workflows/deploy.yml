@@ -3,7 +3,7 @@ name: Deploy Vue to GitHub Pages
 on:
   # Deploy on every push to main
   push:
-    branches: ["main"]
+    branches: ["master"]
 
   # Allow manual deploy
   workflow_dispatch:
