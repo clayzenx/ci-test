@@ -48,6 +48,9 @@ jobs:
     # Step 3: clean install dependencies
     - run: npm ci
 
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps
+
     # Step 4: build project (Vue build)
     # --if-present means "don’t fail if script doesn't exist"
     - run: npm run build --if-present
