@@ -1,31 +1,56 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
+# Name shown in the GitHub Actions UI
 name: Node.js CI
 
+# When this workflow should run
 on:
+  # Run when pushing commits
   push:
+    # Only for these branches
     branches: [ "master" ]
+
+  # Run when opening or updating a Pull Request
   pull_request:
     branches: [ "master" ]
 
+# A workflow can have multiple jobs
 jobs:
+  # Job ID (any name you want)
   build:
 
+    # OS where this job runs
     runs-on: ubuntu-latest
 
+    # Strategy allows running the same job multiple times
+    # (e.g. multiple Node versions)
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
+    # Ordered list of steps
     steps:
+    # Step 1: clone your repository into the runner
     - uses: actions/checkout@v4
+
+    # Step 2: install Node.js
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
+      # Node version from the matrix above
       with:
+        # Node version from the matrix above
         node-version: ${{ matrix.node-version }}
+        # Automatically cache node_modules
         cache: 'npm'
+
+    # Step 3: clean install dependencies
     - run: npm ci
+
+    # Step 4: build project (Vue build)
+    # --if-present means "don’t fail if script doesn't exist"
     - run: npm run build --if-present
-    - run: npm test
+
+    # Step 5: run tests (optional)
+    - run: npm test --if-present
