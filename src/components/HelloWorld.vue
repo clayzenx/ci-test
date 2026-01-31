@@ -2,6 +2,8 @@
 defineProps<{
   msg: string
 }>()
+
+const tmp = 'tmp'
 </script>
 
 <template>
